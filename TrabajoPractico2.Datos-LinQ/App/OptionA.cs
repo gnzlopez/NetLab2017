@@ -54,7 +54,7 @@ namespace App
             orderToAdd.ShipVia = int.Parse(Console.ReadLine());
 
             Console.WriteLine("Ingrese el costo del envio");
-            orderToAdd.Freight = decimal.Parse(Console.ReadLine());
+                orderToAdd.Freight = decimal.Parse(Console.ReadLine());
 
             Console.WriteLine("Ingrese el nombre del envio");
             orderToAdd.ShipName = Console.ReadLine();
@@ -77,6 +77,7 @@ namespace App
             orderToAdd.OrderID = controller.AddOrder(orderToAdd);
             var totalPrice = AddDetails(orderToAdd.OrderID);
 
+            controller.SaveChanges();
             Console.WriteLine($"Orden ID: {orderToAdd.OrderID} con importe {totalPrice} se ha creado correctamente");
         }
 

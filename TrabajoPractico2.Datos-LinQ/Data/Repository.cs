@@ -40,14 +40,14 @@ namespace Data
 
         public bool SaveChanges()
         {
-            try
-            {
-                context.SaveChanges();
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            //try
+            //{
+             var  i =   context.SaveChanges();
+            //}
+            //catch (Exception)
+            //{
+            //    return false;
+            //}
 
             return true;
         }

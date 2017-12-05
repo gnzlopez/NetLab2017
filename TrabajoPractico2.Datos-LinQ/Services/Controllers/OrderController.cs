@@ -23,7 +23,7 @@ namespace Services
 
             repository.Persist(newOrder);
 
-            if (!repository.SaveChanges()) Console.WriteLine("Ha ocurrido un problema, intentelo nuevamente");
+           // if (!repository.SaveChanges()) Console.WriteLine("Ha ocurrido un problema, intentelo nuevamente");
 
             return newOrder.OrderID;
         }
@@ -76,6 +76,14 @@ namespace Services
                 .Select(c => Mapper(c));
 
             return allOrders;
+        }
+
+
+        //GUARDA LOS CAMBIOS
+        public bool SaveChanges()
+        {
+            var test = repository.SaveChanges();
+            return test;
         }
 
 

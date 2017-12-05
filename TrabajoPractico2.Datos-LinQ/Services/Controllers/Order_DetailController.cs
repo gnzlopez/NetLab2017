@@ -16,6 +16,8 @@ namespace Services
             repository = new Repository<Order_Detail>();
         }
 
+
+
         //AGREGA UN DETAIL
         public void AddOrderDetail(Order_DetailModel model)
         {
@@ -26,14 +28,14 @@ namespace Services
                 UnitPrice = model.UnitPrice,
                 Quantity = model.Quantity,
                 Discount = model.Discount,
-                Order = repository.Set().FirstOrDefault(c => c.OrderID == model.OrderID).Order
+                //Order = repository.Set().FirstOrDefault(c => c.OrderID == model.OrderID).Order
                 //Product =
                 //new Repository<Product>().Set().FirstOrDefault(c => c.ProductID == model.ProductID)
             };
 
             repository.Persist(newOrderDetail);
 
-            repository.SaveChanges();
+            
         }
 
         //BORRA TODAS LAS DETAILS DE UNA MISMA ORDER
@@ -49,8 +51,7 @@ namespace Services
                 repository.Remove(item);
             }
             
-
-            repository.SaveChanges();
+            
         }
         
 
