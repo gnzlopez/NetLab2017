@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Menu.cs" />
+    <Compile Include="OpcionM.cs" />
     <Compile Include="OptionA.cs" />
     <Compile Include="OptionE.cs" />
     <Compile Include="Program.cs" />

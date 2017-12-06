@@ -16,8 +16,10 @@ namespace Services
             repository = new Repository<Order>();
         }
 
-        //INGRESAR UNA ORDER Y DEVUELVE EL ID AUTOGENERADO DE LA MISMA
-        public int AddOrder(OrderModel model)
+        /// <summary>
+        ///  INGRESAR UNA ORDER Y DEVUELVE EL ID AUTOGENERADO DE LA MISMA
+        /// </summary>
+       public int AddOrder(OrderModel model)
         {
             var newOrder = Mapper(model);
 
@@ -28,7 +30,11 @@ namespace Services
             return newOrder.OrderID;
         }
 
-        //BORRAR UNA ORDER
+        //
+        /// <summary>
+        /// BORRAR UNA ORDER MEDIANTE SU ID
+        /// </summary>
+        /// <param name="orderId"></param>
         public void RemoveOrder(int orderId)
         {
 
@@ -43,12 +49,16 @@ namespace Services
 
         }
 
-        //MODIFICAR UNA ORDER
-        public void UpdateOrder(int orderId, OrderModel model)
+        //
+        /// <summary>
+        /// MODIFICAR UNA ORDER
+        /// </summary>
+        /// <param name="model"></param>
+        public void UpdateOrder(OrderModel model)
         {
             var orderToUpdate = repository
                 .Set()
-                .FirstOrDefault(o => o.OrderID == orderId);
+                .FirstOrDefault(o => o.OrderID == model.OrderID);
 
             orderToUpdate = Mapper(model);
 
@@ -57,7 +67,11 @@ namespace Services
             // repository.SaveChanges();
         }
 
-        //TRAER UNA ORDER POR ID
+        /// <summary>
+        /// BUSCA UNA ORDER POR SU ID Y DEVUELVE COMO PRIMER ITEM SI EXISTE Y COMO SEGUNDO SU MODEL
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public Tuple<bool, OrderModel> GetById(int orderId)
         {
 
@@ -77,7 +91,10 @@ namespace Services
 
 
 
-        //TRAER TODAS LAS ORDERS
+        /// <summary>
+        /// TRAE TODAS LAS ORDERS
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<OrderModel> GetAll()
         {
             var allOrders = repository

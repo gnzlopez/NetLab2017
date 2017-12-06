@@ -21,7 +21,7 @@ namespace App
             } while (orderId == 0);
 
             var orderToRemove = controller.GetById(orderId);
-            if (orderToRemove.Item1 == true)
+            if (orderToRemove.Item1)
             {
                 if (orderToRemove.Item2.ShipCountry == "Mexico" || orderToRemove.Item2.ShipCountry == "France")
                 {
@@ -34,7 +34,8 @@ namespace App
                     Console.WriteLine($"Orden numero {orderId} eliminada correctamente");
                 }
             }
-            else Console.WriteLine("No existe ninguna orden con ese ID");
+            else
+                Console.WriteLine("No existe ninguna orden con ese ID");
         }
     }
 }
