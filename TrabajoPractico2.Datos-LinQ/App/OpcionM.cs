@@ -29,7 +29,8 @@ namespace App
             {
                 var orderModified = ModifyOrder(orderToModify.Item2);
                 controller.UpdateOrder(orderModified);
-                controller.SaveChanges();
+                if (controller.SaveChanges()) Console.WriteLine("Se modifico correctamente");
+                else Console.WriteLine("Ha ocurrido algun problema. Vuelva a intentarlo.");
             }
             else
             {
@@ -40,50 +41,105 @@ namespace App
         private OrderModel ModifyOrder(OrderModel orderToModify)
         {
             int op;
-            bool keepOn;
-            Console.WriteLine($"Que campo desea mofificar?\n" +
-                $"2. CustomerID = {orderToModify.CustomerID}\n" +
-                $"3. EmployeeID = {orderToModify.EmployeeID}\n" +
-                $"4. OrderDate = {orderToModify.OrderDate}\n" +
-                $"5. RequiredDate = {orderToModify.RequiredDate}\n" +
-                $"6. ShippedDate = {orderToModify.ShippedDate}\n" +
-                $"7. ShipVia = {orderToModify.ShipVia}\n" +
-                $"8. Freight = {orderToModify.Freight}\n" //+
-                //$"9. ShipName = {orderToModify.ShipName}\n" +
-                //$"10.ShipAddress = {orderToModify.ShipAddress}\n" +
-                //$"11.ShipCity = {orderToModify.ShipCity}\n" +
-                //$"12.ShipRegion = {orderToModify.ShipRegion}\n" +
-                //$"13.ShipPostalCode = {orderToModify.ShipPostalCode}\n" +
-                //$"14.ShipCountry = {orderToModify.ShipCountry}\n"
-                );
+            bool keepOn = true;
             do
             {
-                Console.WriteLine("Ingrese el numera de la opcion que desee modificar");
-                int.TryParse(Console.ReadLine(), out op);
-            } while (op == 0 || op > 14);
+                Console.WriteLine(
+                    $"OrderID: {orderToModify.OrderID} " +
+                    $"CustomerID = {orderToModify.CustomerID}" +
+                    $". EmployeeID = {orderToModify.EmployeeID}\n" +
+                    $"Que campo desea mofificar?\n" +
+                    $"1. OrderDate = {orderToModify.OrderDate}\n" +
+                    $"2. RequiredDate = {orderToModify.RequiredDate}\n" +
+                    $"3. ShippedDate = {orderToModify.ShippedDate}\n" +
+                    $"4. ShipVia = {orderToModify.ShipVia}\n" +
+                    $"5. Freight = {orderToModify.Freight}\n" //+
+                                                              //$"6. ShipName = {orderToModify.ShipName}\n" +
+                                                              //$"7.ShipAddress = {orderToModify.ShipAddress}\n" +
+                                                              //$"8.ShipCity = {orderToModify.ShipCity}\n" +
+                                                              //$"9.ShipRegion = {orderToModify.ShipRegion}\n" +
+                                                              //$"10.ShipPostalCode = {orderToModify.ShipPostalCode}\n" +
+                                                              //$"11.ShipCountry = {orderToModify.ShipCountry}\n"
+                    );
+                do
+                {
+                    Console.WriteLine("Ingrese el numera de la opcion que desee modificar");
+                    int.TryParse(Console.ReadLine(), out op);
+                } while (op == 0 || op > 13);
 
-            Console.WriteLine("Ingrese el nuevo valor");
-            var newVal = Console.ReadLine();
+                Console.WriteLine("Ingrese el nuevo valor");
+                var newVal = Console.ReadLine();
 
-            switch (op)
-            {
-                case :
-                    break;
-                case :
-                    break;
-                case :
-                    break;
-                case :
-                    break;
-                case :
-                    break;
-                case :
-                    break;
-                case :
-                    break;
-                case :
-                    break;
-            }
+                switch (op)
+                {
+                    case 1:
+                        DateTime date;
+                        if (!DateTime.TryParse(newVal, out date))
+                        {
+                            Console.WriteLine("No es una fecha valida. Vuelva a intentarlo");
+                            break;
+                        }
+                        orderToModify.OrderDate = date;
+                        Console.WriteLine("Valor actualizado");
+                        break;
+                    case 2:
+                        if (!DateTime.TryParse(newVal, out date))
+                        {
+                            Console.WriteLine("No es una fecha valida. Vuelva a intentarlo");
+                            break;
+                        }
+                        orderToModify.RequiredDate = date;
+                        Console.WriteLine("Valor actualizado");
+                        break;
+                    case 3:
+                        if (!DateTime.TryParse(newVal, out date))
+                        {
+                            Console.WriteLine("No es una fecha valida. Vuelva a intentarlo");
+                            break;
+                        }
+                        orderToModify.ShippedDate = date;
+                        Console.WriteLine("Valor actualizado");
+                        break;
+                    case 4:
+                        int via;
+                        int.TryParse(newVal, out via);
+
+                        if (via < 1 || via > 3)
+                        {
+                            Console.WriteLine("No es un valor valido. Intente nuevamente");
+                            break;
+                        }
+                        orderToModify.ShipVia = via;
+                        Console.WriteLine("Valor actualizado");
+                        break;
+                    case 5:
+                        decimal freight;
+                        decimal.TryParse(newVal, out freight);
+
+                        if (freight > 0.0m)
+                        {
+                            Console.WriteLine("No es un valor valido. Intente nuevamente");
+                            break;
+                        }
+                        orderToModify.Freight = freight;
+                        Console.WriteLine("Valor actualizado");
+                        break;
+                        //case 6:
+                        //    break;
+                        //case 7:
+                        //    break;
+                        //case 8:
+                        //    break;
+                }
+                string resp;
+                do
+                {
+                    Console.WriteLine("Desea seguir haciendo cambios? S/N");
+                    resp = Console.ReadLine().ToLower();
+                } while (resp != "n" && resp != "s");
+                 keepOn = resp == "n" ? false : true;
+            } while (keepOn);
+            return orderToModify;
         }
     }
 }

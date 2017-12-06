@@ -21,7 +21,7 @@ namespace Services
         /// </summary>
        public int AddOrder(OrderModel model)
         {
-            var newOrder = Mapper(model);
+            var newOrder = Mapper(new Order(), model);
 
             repository.Persist(newOrder);
 
@@ -60,11 +60,10 @@ namespace Services
                 .Set()
                 .FirstOrDefault(o => o.OrderID == model.OrderID);
 
-            orderToUpdate = Mapper(model);
+            Mapper(orderToUpdate, model);
 
             repository.Update(orderToUpdate);
-
-            // repository.SaveChanges();
+            repository.SaveChanges();
         }
 
         /// <summary>
@@ -119,9 +118,8 @@ namespace Services
         /// </summary>
         /// <param name="m"></param>
         /// <returns></returns>
-        public Order Mapper(OrderModel m)
+        public Order Mapper(Order o, OrderModel m)
         {
-            var o = new Order();
             o.OrderID = m.OrderID;
             o.CustomerID = m.CustomerID;
             o.EmployeeID = m.EmployeeID;

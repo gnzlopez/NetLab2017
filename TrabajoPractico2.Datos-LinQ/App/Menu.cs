@@ -30,6 +30,8 @@ namespace App
                     optionE.Start();
                     break;
                 case "m":
+                    var optionM = new OpcionM();
+                    optionM.Start();
                     break;
                 case "v":
                     break;

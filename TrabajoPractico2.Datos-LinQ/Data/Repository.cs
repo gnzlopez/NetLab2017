@@ -29,7 +29,7 @@ namespace Data
 
         public T Update(T entity)
         {
-            context.Entry<T>(entity);
+            context.Entry<T>(entity).State = System.Data.Entity.EntityState.Modified;
             return entity;
         }
 
