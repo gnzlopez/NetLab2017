@@ -21,5 +21,12 @@ namespace Services
         {
             return repository.Set().Any(c => c.CustomerID == id);
         }
+
+        public string GetName(string id)
+        {
+            return repository.Set().FirstOrDefault(c => c.CustomerID == id).CompanyName;
+        }
+
+        
     }
 }

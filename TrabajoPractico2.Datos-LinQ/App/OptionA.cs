@@ -9,14 +9,14 @@ namespace App
 {
     class OptionA
     {
-
+        OrderController controller = new OrderController();
         /// <summary>
         /// Inicia el formulario para agregar una Order y envia a agregar el resultado
         /// </summary>
         public void Start()
         {
             OrderModel orderToAdd = new OrderModel();
-            OrderController controller = new OrderController();
+            
 
 
             do
@@ -74,7 +74,7 @@ namespace App
                 Console.WriteLine("Ingrese el costo del envio");
                 decimal.TryParse(Console.ReadLine(), out freight);
                 orderToAdd.Freight = freight;
-            } while (orderToAdd.Freight > 0.0m);
+            } while (orderToAdd.Freight < 0.0m);
 
 
             Console.WriteLine("Ingrese el nombre del envio");
@@ -96,24 +96,22 @@ namespace App
             orderToAdd.ShipCountry = Console.ReadLine();
 
             orderToAdd.OrderID = controller.AddOrder(orderToAdd);
-            var totalPrice = AddDetails(orderToAdd.OrderID);
 
-            if(controller.SaveChanges())
-            Console.WriteLine($"Orden ID: {orderToAdd.OrderID} con importe {totalPrice} se ha creado correctamente");
-            else Console.WriteLine("Ha ocurido un problema y no se realizo ningun cambio. \n Intente nuevamente");
+            AddDetails(orderToAdd.OrderID);
+            
         }
 
         /// <summary>
-        /// Realiza el formulario para agregar una OrderDetail y envia a agregar el resultaro
+        /// Realiza el formulario para agregar una OrderDetail y envia a agregar el resultado
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        public decimal AddDetails(int orderId)
+        public void AddDetails(int orderId)
         {
             var seguir = true;
             decimal total = 0;
             Order_DetailController detailController = new Order_DetailController();
-            //ICollection<Order_DetailModel> orderDetailsList = new List<Order_DetailModel>();
+            ICollection<Order_DetailModel> orderDetailsList = new List<Order_DetailModel>();
 
             do
             {
@@ -122,10 +120,13 @@ namespace App
                 detailToAdd.OrderID = orderId;
                 do
                 {
+                    ProductModel product ;
                     ProductController productController = new ProductController();
                     Console.WriteLine("Ingrese el nombre del producto");
                     var productName = Console.ReadLine();
-                    var product = productController.GetByName(productName);
+                    if (productName != "")
+                        product = productController.GetByName(productName);
+                    else continue;
 
                     detailToAdd.ProductID = product.ProductID;
                     detailToAdd.UnitPrice = (decimal)product.UnitPrice;
@@ -139,25 +140,31 @@ namespace App
                     short x;
                     short.TryParse(Console.ReadLine(), out x);
                     detailToAdd.Quantity = x;
-                } while (detailToAdd.Quantity == 0);
+                } while (detailToAdd.Quantity <= 0);
 
                 do
                 {
                     float x;
-                    Console.WriteLine("Ingrese el descuento");
+                    Console.WriteLine("Ingrese el descuento(%)");
                     float.TryParse(Console.ReadLine(), out x);
-                    detailToAdd.Discount = x;
-                } while (detailToAdd.Discount < 0 || detailToAdd.Discount > 30);
+                    detailToAdd.Discount = x/100;
+                } while (detailToAdd.Discount < 0.0f || detailToAdd.Discount > 0.30f);
 
-                detailController.AddOrderDetail(detailToAdd);
-                total = total + (detailToAdd.UnitPrice * detailToAdd.Quantity);
+                orderDetailsList.Add(detailToAdd);
+                total = total + (detailToAdd.UnitPrice * detailToAdd.Quantity * decimal.Parse(detailToAdd.Discount.ToString()));
                 Console.WriteLine("Detalle agregado. Desea agregar otro? (Y/N)");
                 if (Console.ReadLine().ToLower() == "n") { seguir = false; }
 
             } while (seguir);
 
+            var b = detailController.AddOrderDetail(orderDetailsList);
 
-            return total;
+            if (b)
+                Console.WriteLine($"Orden ID: {orderId} con importe {total} se ha creado correctamente");
+            else Console.WriteLine("Ha ocurido un problema y no se realizo ningun cambio. \n Intente nuevamente");
+
+            Console.ReadKey();
+
 
         }
     }

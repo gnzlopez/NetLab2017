@@ -13,10 +13,10 @@ namespace App
 
             OrderController controller = new OrderController();
             int orderId;
-            System.Console.WriteLine("Ingrese el ID de la orden que desea eliminar");
 
             do
             {
+                Console.WriteLine("Ingrese el ID de la orden que desea eliminar");
                 int.TryParse(Console.ReadLine(), out orderId);
             } while (orderId == 0);
 
@@ -36,6 +36,8 @@ namespace App
             }
             else
                 Console.WriteLine("No existe ninguna orden con ese ID");
+
+            Console.ReadLine();
         }
     }
 }

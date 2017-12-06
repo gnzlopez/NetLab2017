@@ -38,6 +38,11 @@ namespace Data
             return context.Set<T>();
         }
 
+        public IQueryable<T> SetInclude(string include)
+        {
+            return context.Set<T>().Include(include);
+        }
+
         public bool SaveChanges()
         {
             //try

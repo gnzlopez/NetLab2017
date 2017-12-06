@@ -19,7 +19,7 @@ namespace Services
 
         public ProductModel GetByName(string name)
         {
-            var productModel = repository.Set(/*new Product()*/)
+            var productModel = repository.Set()
                 .Select(c => new ProductModel
                 {
                     ProductID = c.ProductID,
@@ -28,6 +28,7 @@ namespace Services
                     UnitsInStock = c.UnitsInStock
                 })
                 .FirstOrDefault(c => c.ProductName.Contains(name));
+
             return productModel;
         }
     }

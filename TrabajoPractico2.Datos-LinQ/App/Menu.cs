@@ -10,7 +10,6 @@ namespace App
     class Menu
     {
         public bool Start() {
-
             Console.WriteLine("Ingrese una opcion " +
                 "\n A - Agregar " +
                 "\n E - Eliminar " +
@@ -34,12 +33,19 @@ namespace App
                     optionM.Start();
                     break;
                 case "v":
+                    var optionV = new OptionV();
+                    optionV.Start();
                     break;
                 case "f":
-                    return true;
+                    Console.WriteLine("Fin. Hasta luego");
+                    return false;
+                default:
+                    Console.WriteLine("Opcion no valida");
+                    Console.ReadKey();
+                    break;
             }
 
-            return false;
+            return true;
         }
          
         

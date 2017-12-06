@@ -18,27 +18,38 @@ namespace Services
 
 
 
-        //AGREGA UN DETAIL
-        public void AddOrderDetail(Order_DetailModel model)
+        //
+        /// <summary>
+        /// AGREGA UN DETAIL
+        /// </summary>
+        /// <param name="model"></param>
+        public bool AddOrderDetail(ICollection<Order_DetailModel> detailList)
         {
-            var newOrderDetail = new Order_Detail
+
+            foreach (var model in detailList)
             {
-                OrderID = model.OrderID,
-                ProductID = model.ProductID,
-                UnitPrice = model.UnitPrice,
-                Quantity = model.Quantity,
-                Discount = model.Discount,
-                //Order = repository.Set().FirstOrDefault(c => c.OrderID == model.OrderID).Order
-                //Product =
-                //new Repository<Product>().Set().FirstOrDefault(c => c.ProductID == model.ProductID)
-            };
+                var newOrderDetail = new Order_Detail
+                {
+                    OrderID = model.OrderID,
+                    ProductID = model.ProductID,
+                    UnitPrice = model.UnitPrice,
+                    Quantity = model.Quantity,
+                    Discount = model.Discount,
+                    //Order = repository.Set().FirstOrDefault(c => c.OrderID == model.OrderID).Order
+                    //Product =
+                    //new Repository<Product>().Set().FirstOrDefault(c => c.ProductID == model.ProductID)
+                };
 
-            repository.Persist(newOrderDetail);
+                repository.Persist(newOrderDetail);
 
-            
+            }
+           return repository.SaveChanges();
         }
 
-        ///BORRA TODAS LAS DETAILS DE UNA MISMA ORDER
+        /// <summary>
+        /// BORRA TODAS LAS DETAILS DE UNA MISMA ORDER
+        /// </summary>
+        /// <param name="orderId"></param>
         public void RemoveOrderDetail(int orderId)
         {
             var orderDetailToRemove = repository
@@ -53,13 +64,17 @@ namespace Services
             repository.SaveChanges();
             
         }
-        
 
-        //DEVUELVO TODOS LOS DETAILS DE UNA MISMA ORDER
+
+        /// <summary>
+        /// DEVUELVE TODOS LOS DETAILS DE UNA MISMA ORDER
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public IEnumerable<Order_DetailModel> GetAllByOrderId(int orderId)
         {
             var orderDetailList = repository
-                .Set(/*new Order_Detail()*/)
+                .Set()
                 .Where(c => c.OrderID == orderId)
                 .Select(c => new Order_DetailModel
                 {
@@ -74,7 +89,28 @@ namespace Services
             return orderDetailList;
         }
 
-        //
 
+        /// <summary>
+        /// DEVUELVE EL PRECIO TOTAL POR ID DE ORDER
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        public decimal GetTotalPrice(int orderId)
+        {   try
+            {
+                var totalPrice = repository
+                    .Set()
+                    .Where(c => c.OrderID == orderId)
+                    .Sum(c => c.UnitPrice * c.Quantity);
+
+                return totalPrice;
+
+            } catch (InvalidOperationException)
+            {
+                return 0;
+            }
+        }
+
+        
     }
 }

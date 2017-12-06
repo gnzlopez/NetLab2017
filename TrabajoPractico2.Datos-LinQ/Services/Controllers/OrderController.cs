@@ -63,7 +63,6 @@ namespace Services
             Mapper(orderToUpdate, model);
 
             repository.Update(orderToUpdate);
-            repository.SaveChanges();
         }
 
         /// <summary>
@@ -104,6 +103,23 @@ namespace Services
             return allOrders;
         }
 
+
+        public IEnumerable<OrderModel> MaxForCountry()
+        {
+            List<OrderModel> listOfModels = new List<OrderModel>();
+
+            var listOfMax = repository.SetInclude("Orders_Details")
+                .GroupBy(c => c.ShipCountry).Select(grp => grp.GroupBy(g => g.CustomerID)
+                .OrderByDescending(s => s.Sum(x => x.Order_Details.Sum(d => d.Quantity * d.UnitPrice)))
+                .Select(or => or.FirstOrDefault()).FirstOrDefault()).ToList();
+             
+
+            foreach (var item in listOfMax)
+            {
+                listOfModels.Add(Mapper(item));
+            }
+            return listOfModels;
+        }
 
         //GUARDA LOS CAMBIOS
         public bool SaveChanges()

@@ -53,6 +53,7 @@
     <Compile Include="OpcionM.cs" />
     <Compile Include="OptionA.cs" />
     <Compile Include="OptionE.cs" />
+    <Compile Include="OptionV.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

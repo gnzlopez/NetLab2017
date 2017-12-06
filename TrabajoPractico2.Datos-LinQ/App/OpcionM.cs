@@ -138,6 +138,7 @@ namespace App
                     resp = Console.ReadLine().ToLower();
                 } while (resp != "n" && resp != "s");
                  keepOn = resp == "n" ? false : true;
+                Console.Clear();
             } while (keepOn);
             return orderToModify;
         }
