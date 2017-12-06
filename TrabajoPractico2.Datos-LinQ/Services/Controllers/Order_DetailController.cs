@@ -38,19 +38,19 @@ namespace Services
             
         }
 
-        //BORRA TODAS LAS DETAILS DE UNA MISMA ORDER
+        ///BORRA TODAS LAS DETAILS DE UNA MISMA ORDER
         public void RemoveOrderDetail(int orderId)
         {
             var orderDetailToRemove = repository
-                .Set(/*new Order_Detail()*/)
+                .Set()
                 .Where(c => c.OrderID == orderId)
-                .ToList();
+                .AsEnumerable();
 
             foreach (var item in orderDetailToRemove)
             {
                 repository.Remove(item);
             }
-            
+            repository.SaveChanges();
             
         }
         

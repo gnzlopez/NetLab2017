@@ -23,7 +23,7 @@ namespace Services
 
             repository.Persist(newOrder);
 
-           // if (!repository.SaveChanges()) Console.WriteLine("Ha ocurrido un problema, intentelo nuevamente");
+            if (!repository.SaveChanges()) Console.WriteLine("Ha ocurrido un problema, intentelo nuevamente");
 
             return newOrder.OrderID;
         }
@@ -31,47 +31,57 @@ namespace Services
         //BORRAR UNA ORDER
         public void RemoveOrder(int orderId)
         {
+
+            var deleteDetails = new Order_DetailController();
+            deleteDetails.RemoveOrderDetail(orderId);
+
             var orderToRemove = repository
-                .Set(/*new Order()*/)
+                .Set()
                 .FirstOrDefault(c => c.OrderID == orderId);
             repository.Remove(orderToRemove);
 
 
-            repository.SaveChanges();
         }
 
         //MODIFICAR UNA ORDER
         public void UpdateOrder(int orderId, OrderModel model)
         {
             var orderToUpdate = repository
-                .Set(/*new Order()*/)
+                .Set()
                 .FirstOrDefault(o => o.OrderID == orderId);
 
             orderToUpdate = Mapper(model);
 
             repository.Update(orderToUpdate);
-            
-            repository.SaveChanges();
+
+            // repository.SaveChanges();
         }
 
         //TRAER UNA ORDER POR ID
-        public OrderModel GetById(int orderId)
+        public Tuple<bool, OrderModel> GetById(int orderId)
         {
-            var order = Mapper(repository
-                .Set(/*new Order()*/)
-                .FirstOrDefault(o => o.OrderID == orderId));
 
-            return order;
+            var order = repository
+                .Set()
+                .FirstOrDefault(o => o.OrderID == orderId);
+
+            if (order != null)
+            {
+                var orderModel = Mapper(order);
+                return Tuple.Create(true, orderModel);
+            }
+
+            return Tuple.Create(false, new OrderModel());
         }
 
-        
 
-       
+
+
         //TRAER TODAS LAS ORDERS
         public IEnumerable<OrderModel> GetAll()
         {
             var allOrders = repository
-                .Set(/*new Order()*/)
+                .Set()
                 .AsEnumerable()
                 .Select(c => Mapper(c));
 
@@ -112,7 +122,7 @@ namespace Services
             o.Customer = m.Customer;
             o.Employee = m.Employee;
             o.Shipper = m.Shipper;
-            
+
             return o;
         }
 
@@ -141,8 +151,8 @@ namespace Services
             o.Customer = m.Customer;
             o.Employee = m.Employee;
             o.Shipper = m.Shipper;
-            
-                return o;
+
+            return o;
         }
     }
 }

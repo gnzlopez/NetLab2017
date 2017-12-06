@@ -41,20 +41,41 @@ namespace App
 
             } while (orderToAdd.EmployeeID == 0);
 
-            Console.WriteLine("Ingrese la fecha de pedido (dd-mm-AAAA)");
-            orderToAdd.OrderDate = DateTime.Parse(Console.ReadLine());
+            DateTime date;
+            do
+            {
 
-            Console.WriteLine("Ingrese la fecha de llegada (dd-mm-AAAA)");
-            orderToAdd.RequiredDate = DateTime.Parse(Console.ReadLine());
+                Console.WriteLine("Ingrese la fecha de pedido (dd-mm-AAAA)");
+                if (!DateTime.TryParse(Console.ReadLine(), out date))
+                    continue;
+                orderToAdd.OrderDate = date;
 
-            Console.WriteLine("Ingrese la fecha de envio (dd-mm-AAAA)");
-            orderToAdd.ShippedDate = DateTime.Parse(Console.ReadLine());
+                Console.WriteLine("Ingrese la fecha de llegada (dd-mm-AAAA)");
+                if (!DateTime.TryParse(Console.ReadLine(), out date)) continue;
+                orderToAdd.RequiredDate = date;
 
-            Console.WriteLine("Ingrese el ID de la via de envio (1-2-3)");
-            orderToAdd.ShipVia = int.Parse(Console.ReadLine());
+                Console.WriteLine("Ingrese la fecha de envio (dd-mm-AAAA)");
+                if (!DateTime.TryParse(Console.ReadLine(), out date)) continue;
+                orderToAdd.ShippedDate = date;
 
-            Console.WriteLine("Ingrese el costo del envio");
-                orderToAdd.Freight = decimal.Parse(Console.ReadLine());
+            } while (date == new DateTime());
+
+            do
+            {
+                var idShip = 0;
+                Console.WriteLine("Ingrese el ID de la via de envio (1-2-3)");
+                int.TryParse(Console.ReadLine(), out idShip);
+                orderToAdd.ShipVia = idShip;
+            } while (orderToAdd.ShipVia < 1 || orderToAdd.ShipVia > 3);
+
+            do
+            {
+                decimal freight;
+                Console.WriteLine("Ingrese el costo del envio");
+                decimal.TryParse(Console.ReadLine(), out freight);
+                orderToAdd.Freight = freight;
+            } while (orderToAdd.Freight > 0.0m);
+
 
             Console.WriteLine("Ingrese el nombre del envio");
             orderToAdd.ShipName = Console.ReadLine();
@@ -77,8 +98,9 @@ namespace App
             orderToAdd.OrderID = controller.AddOrder(orderToAdd);
             var totalPrice = AddDetails(orderToAdd.OrderID);
 
-            controller.SaveChanges();
+            if(controller.SaveChanges())
             Console.WriteLine($"Orden ID: {orderToAdd.OrderID} con importe {totalPrice} se ha creado correctamente");
+            else Console.WriteLine("Ha ocurido un problema y no se realizo ningun cambio. \n Intente nuevamente");
         }
 
         /// <summary>
@@ -128,7 +150,7 @@ namespace App
                 } while (detailToAdd.Discount < 0 || detailToAdd.Discount > 30);
 
                 detailController.AddOrderDetail(detailToAdd);
-               total = total + (detailToAdd.UnitPrice * detailToAdd.Quantity);
+                total = total + (detailToAdd.UnitPrice * detailToAdd.Quantity);
                 Console.WriteLine("Detalle agregado. Desea agregar otro? (Y/N)");
                 if (Console.ReadLine().ToLower() == "n") { seguir = false; }
 

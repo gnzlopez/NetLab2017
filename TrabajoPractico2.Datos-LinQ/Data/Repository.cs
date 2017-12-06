@@ -42,13 +42,13 @@ namespace Data
         {
             //try
             //{
-             var  i =   context.SaveChanges();
+                var i = context.SaveChanges();
             //}
             //catch (Exception)
             //{
             //    return false;
             //}
-
+            if (i == 0) return false;
             return true;
         }
     }
