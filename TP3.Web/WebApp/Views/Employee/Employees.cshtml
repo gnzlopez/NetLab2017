@@ -1,0 +1,49 @@
+﻿@model List<WebApp.Models.EmployeeModel>
+
+@{
+    ViewBag.Title = "Employees";
+}
+
+<h2 class="titlePage">Empleados</h2>
+<ul id="listOfButton">
+    <a href="/Employee/Create" class="button">Crear nuevo</a>
+    <a href="" class="button">Agregar país</a>
+</ul>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>País</th>
+            <th>Fecha de Ingreso</th>
+            <th>Turno</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+            {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.Country</td>
+                @if (item.EntryDate != null)
+                {
+                <td>@item.EntryDate.Value.ToShortDateString()</td>
+                } else
+                {
+                    <td> - - </td>
+                }
+                <td>@item.WorkShift</td>
+                <td>
+                    <a class="button" href="/Employee/delete?Id=@item.Id">Eliminar</a>
+                    <a class="button" href="modify?Id=@item.Id">Modificar</a>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>

@@ -1,0 +1,51 @@
+﻿@model WebApp.Models.EmployeeModel
+
+@{
+    ViewBag.Title = "Crear";
+}
+
+
+@if (Model != null && Model.LastName != null)
+{
+    <h2 class="titlePage">Modificar nuevo empleado</h2>
+}
+else
+{
+    <h2 class="titlePage">Crear nuevo empleado</h2>
+}
+
+
+<div id="newEmployeeForm">
+    <form action="Create" method="post">
+        <label class="labelForm">Id</label><br />
+        <label type="number" name="id" readonly>@Model.Id</label> <br />
+        <label class="labelForm">Nombre:</label><br />
+        <input type="text" name="FirstName" value=@Model.FirstName required /> <br />
+        <label class="labelForm">Apellido:</label><br />
+        <input type="text" name="LastName" value=@Model.LastName required /> <br />
+        <label class="labelForm">País:</label><br />
+        <select id="Country" name="Country">
+            <option value="" selected hidden>Seleccione un país</option>
+            @foreach (var item in WebApp.Models.PruebaListaEmpleados.countries)
+            {
+                <option value=@item>@item</option>
+            }
+        </select><br />
+        <label class="labelForm">Fecha de Ingreso:</label><br />
+        <input type="date" value=@Model.EntryDate.Value.ToShortDateString() name="EntryDate" /> <br /><br />
+        <label class="labelForm">Turno:</label><br />
+        Mañana: <input type="radio" value=@WebApp.Models.Shift.MorningShift name="WorkShift" />
+        Tarde: <input type="radio" value=@WebApp.Models.Shift.LateShift name="WorkShift" />
+        Noche: <input type="radio" value=@WebApp.Models.Shift.NightShift name="WorkShift" /><br /><br />
+        <button class="button" type="submit">Crear</button>
+        <button class="button" type="reset">Limpiar</button>
+        <button class="buttonCancel" type="button" onclick="location.href='@Url.Action("Employees", "Employee")'">Cancelar</button>
+    </form>
+</div>
+
+<datalist id="Country">
+    @foreach (var item in WebApp.Models.PruebaListaEmpleados.countries)
+            {
+        <option value=@item></option>
+    }
+</datalist>

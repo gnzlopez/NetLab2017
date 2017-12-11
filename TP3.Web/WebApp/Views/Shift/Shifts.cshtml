@@ -1,0 +1,59 @@
+﻿@model IEnumerable<WebApp.Models.EmployeeModel>
+
+@{
+    ViewBag.Title = "Turnos";
+}
+
+<h2 class="titlePage">Turnos</h2>
+<ul id="listOfButton">
+    @Html.ActionLink("Turno Mañana", "MorningShift", "Shift", new { area = "" }, new { @class = "button" })
+    @Html.ActionLink("Turno Tarde", "LateShift", "Shift", new { area = "" }, new { @class = "button" })
+    @Html.ActionLink("Turno Noche", "NightShift", "Shift", new { area = "" }, new { @class = "button" })
+    </ul>
+    @if (@Model != null)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre y Apellido</th>
+                    <th>Hora Ingreso</th>
+                    <th>Hora Egreso</th>
+                    <th>Hs Trabajadas</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.FirstName @item.LastName</td>
+                        @if (item.EntryHour == null)
+                    {
+                            <td>@Html.ActionLink("Agregar Ingreso", "Shifts", "Shift", new { area = "" }, new { @class = "button" })</td>
+                            <td>- -</td>
+                            <td>- -</td>
+                        }
+                        else
+                        {
+                            if (item.ExitHour == null)
+                            {
+
+                                <td>@item.EntryHour.Value.TimeOfDay</td>
+                                <td>@Html.ActionLink("Agregar Egreso", "Shifts", "Shift", new { area = "" }, new { @class = "button" })</td>
+                                <td> - - </td>
+                            }
+                            else
+                            {
+                                <td>@item.EntryHour.Value.TimeOfDay</td>
+                                <td>@item.ExitHour.Value.TimeOfDay</td>
+                                <td>@(item.ExitHour.Value.TimeOfDay - item.EntryHour.Value.TimeOfDay)</td>
+                            }
+                        }
+
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    }
